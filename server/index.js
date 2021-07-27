@@ -7,12 +7,12 @@ import postRoutes from './routes/posts.js'
 
 const app = express();
 
-// Sets up where every route inside the postRoutes is going to start with posts
-app.use('/posts', postRoutes)
-
 app.use(express.json({ limit: "30mb", extended: true }))
 app.use(express.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors())
+
+// Sets up where every route inside the postRoutes is going to start with posts - MUST BE BELOW CORS INITIALIZATION
+app.use('/posts', postRoutes)
 
 // Connect to our MongoDB Cluster
 const CONNECTION_URL = `mongodb+srv://BrendanCariota:Cariota1.@cluster0.i14ly.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
