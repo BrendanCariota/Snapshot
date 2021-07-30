@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 
 import postRoutes from './routes/posts.js'
+import userRoutes from './routes/users.js'
 
 const app = express();
 dotenv.config()
@@ -14,13 +15,14 @@ app.use(cors())
 
 // Sets up where every route inside the postRoutes is going to start with posts - MUST BE BELOW CORS INITIALIZATION
 app.use('/posts', postRoutes)
+app.use('/users', userRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello to Snapshot API')
 })
 
 // PORT we are running the server on
-const PORT = process.env.PORT
+const PORT = 5000
 
 // Connecting to the Database with our URL and passing in the object to prevent warnings
 mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
