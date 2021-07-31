@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
     const post = req.body
 
     // Syntax to create a new post with our Post Schema
-    const newPost = new PostMessage(post)
+    const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() })
 
     try {
         // Saves new post in database
@@ -46,13 +46,13 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
 
-    const { id: _id } = req.params
+    const { id } = req.params
 
-    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id')
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id')
 
-    await PostMessage.findByIdAndRemove(_id)
+    await PostMessage.findByIdAndRemove(id)
 
-    res.json({ message: 'Post delted successfully' })
+    res.json({ message: 'Post deleted successfully' })
 }
 
 export const likePost = async (req, res) => {
@@ -72,7 +72,7 @@ export const likePost = async (req, res) => {
         post.likes.push(req.userId)
     } else {
         // Dislike the Post
-        post.likes = post.like.filter((id) => id !== String(req.userId))
+        post.likes = post.likes.filter((id) => id !== String(req.userId))
     }
 
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true })

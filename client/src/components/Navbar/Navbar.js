@@ -3,6 +3,7 @@ import { AppBar, Avatar, Button, Typography, Toolbar } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router'
 import { Link } from 'react-router-dom'
+import decode from 'jwt-decode'
 import useStyles from './styles'
 import snapshot from '../../images/snapshot.png'
 
@@ -15,8 +16,6 @@ const Navbar = () => {
 
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
 
-    console.log(user)
-
     const logout = () => {
         dispatch({ type: 'LOGOUT' })
         history.push('/')
@@ -25,10 +24,17 @@ const Navbar = () => {
 
     useEffect(() => {
         const token = user?.token
+
+        if(token) {
+            const decodedToken = decode(token)
+
+            if(decodedToken.exp * 1000 < new Date().getTime()) logout()
+        }
         
         // JWT
 
         setUser(JSON.parse(localStorage.getItem('profile')))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
     return (

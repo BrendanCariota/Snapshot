@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 })
 
 // PORT we are running the server on
-const PORT = 5000
+const PORT = process.env.PORT
 
 // Connecting to the Database with our URL and passing in the object to prevent warnings
 mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
